@@ -1,0 +1,159 @@
+/*
+Original name: pl_getIn_vehicle
+New name:      KMD_fnc_getInVehicle
+Original url: "Plmod\pl_vehicle_fnc.sqf"
+*/
+    private ["_vics", "_targetVic", "_groupLen", "_group"];
+
+    _group = hcSelected player select 0;
+    _groupLen = count (units _group);
+
+    if (visibleMap) then {
+        pl_show_vehicles_pos = getPos (leader _group);
+        pl_show_vehicles = true;
+        hint "Select TRANSPORT on Map";
+        onMapSingleClick {
+            pl_mapClicked = true;
+            _cords = (findDisplay 12 displayCtrl 51) ctrlMapScreenToWorld getMousePosition;
+            pl_vics = nearestObjects [_cords, ["Car", "Truck", "Tank", "Air"], 10, true];
+            hintSilent "";
+            onMapSingleClick "";
+        };
+        while {!pl_mapClicked} do {sleep 0.1};
+        pl_show_vehicles = false;
+        pl_mapClicked = false;
+    }
+    else
+    {
+        pl_vics = [cursorTarget];
+    };
+    {
+        if (vehicle (leader _group) == leader _group) then {
+            _cargoCap = _x emptyPositions "cargo"; 
+            if (_cargoCap >= _groupLen) then {
+                _targetVic = _x;
+            };
+        }
+        else
+        {
+            _vic = vehicle (leader _group);
+            _crewCap = [typeOf _vic, true] call BIS_fnc_crewCount;
+            _cargoCap = _crewCap - (count (crew _vic));
+            _groupLen = 0;
+            {
+                if (vehicle _x == _x) then {
+                    _groupLen = _groupLen + 1;
+                };
+            } forEach (units _group);
+            if (_cargoCap >= _groupLen) then {
+                _targetVic = _x;
+            };
+        };
+    } forEach pl_vics;
+    if !(isNil "_targetVic") then {
+
+        // Request Airlift
+        if ((_targetVic distance2D (leader _group)) > 200 and _targetVic isKindOf "Air") then {
+            {
+                _x disableAI "AUTOCOMBAT";
+                _x disableAI "TARGET";
+                _x disableAI "AUTOTARGET";
+            } forEach (units (group (driver _targetVic)));
+            group (driver _targetVic) addWaypoint [getPos (leader _group), 0];
+            (group (driver _targetVic)) setVariable ["setSpecial", true];
+            (group (driver _targetVic)) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\takeoff_ca.paa"];
+            playSound "beep";
+            driver _targetVic sideChat format ["%1: Moving to to rendez-vous location", groupId (group (driver _targetVic))];
+            sleep 20;
+            waitUntil {sleep 0.1; unitReady _targetVic or !alive _targetVic};
+            playSound "beep";
+            driver _targetVic sideChat format ["%1: Beginning landing", groupId (group (driver _targetVic))];
+            _targetVic land "GET IN";
+            sleep 10;
+            waitUntil {sleep 0.1; (isTouchingGround _targetVic) or !alive _targetVic};
+            sleep 1;
+        };
+
+        [_group] call KMD_fnc_reset;
+        sleep 0.2;
+
+        // Vehicle Transport
+        if ((vehicle (leader _group)) != leader _group) then {
+            _vic = vehicle (leader _group);
+            if ((_targetVic canVehicleCargo _vic) select 0) then {
+                _targetVic animateDoor ["Door_1_source", 1];
+                _vicName = getText (configFile >> "CfgVehicles" >> typeOf _targetVic >> "displayName");
+                playSound "beep";
+                leader _group sideChat format ["%1: Getting in %2", (groupId _group), _vicName];
+                _group setVariable ["pl_show_info", false];
+                (group (driver _targetVic)) setVariable ["setSpecial", true];
+                (group (driver _targetVic)) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa"];
+                
+                _wp = _group addWaypoint [getPosASL _targetVic, 0];
+                _wp setWaypointType "VEHICLEINVEHICLEGETIN";
+                // player hcRemoveGroup _group;
+                {
+                    player hcRemoveGroup (group (_x select 0));
+                } forEach fullCrew[_vic, "cargo", false];
+                // player hcSetGroup [(group (driver _targetVic))];
+            }
+            else
+            {
+                playSound "beep";
+                hint "No avaiable Transport";
+            };
+        }
+        // Infantry Tranport
+        else
+        {
+            if (_targetVic isKindOf "Air") then {
+                [_targetVic, 1] call KMD_fnc_doorAnimation;
+            };
+
+            _targetVic setUnloadInCombat [false, false];
+
+            for "_i" from count waypoints _group - 1 to 0 step -1 do {
+                deleteWaypoint [_group, _i];
+            };
+            _vicName = getText (configFile >> "CfgVehicles" >> typeOf _targetVic >> "displayName");
+            leader _group sideChat format ["%1: Getting in %2", (groupId _group), _vicName];
+            (group (driver _targetVic)) setVariable ["setSpecial", true];
+            (group (driver _targetVic)) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa"];
+            _group setVariable ["setSpecial", true];
+            _group setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa"];
+            {
+                if !(_x in (crew _targetVic)) then {
+                    _x assignAsCargo _targetVic;
+                    [_x] allowGetIn true;
+                    [_x] orderGetIn true;
+                }
+                else
+                {
+                    [_x] allowGetIn true;
+                    [_x] orderGetIn true;
+                }; 
+            } forEach (units _group);
+            _group setVariable ["onTask", true];
+            waitUntil {sleep 0.1; ({_x in _targetVic} count (units _group) > 0) or !(_group getVariable ["onTask", true])};
+            if !(_group getVariable "onTask") then {
+                {
+                    unassignVehicle _x;
+                } forEach (units _group);
+                (group (driver _targetVic)) setVariable ["setSpecial", false];
+            }
+            else
+            {
+                _group setVariable ["onTask", false];
+                _group setVariable ["setSpecial", false];
+                _group setVariable ["pl_show_info", false];
+                if !(_targetVic isKindOf "Air") then {
+                    player hcRemoveGroup _group;
+                };
+            };
+        };
+    }
+    else
+    {
+        // playSound "beep";
+        hint "No avaiable Transport";
+    };
