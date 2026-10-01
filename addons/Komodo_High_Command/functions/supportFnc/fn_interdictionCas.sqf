@@ -224,7 +224,7 @@ Original url: "Plmod\pl_support_fnc.sqf"
                 doGetOut _x;
             } forEach [_medic, _gunner];
             _ccpGroup selectLeader _gunner;
-            [_ccpGroup] call pl_set_up_ai;
+            [_ccpGroup] call KMD_fnc_setupAi;
             sleep 5;
             [_ccpGroup, true, _gunner] spawn KMD_fnc_ccp;
         };

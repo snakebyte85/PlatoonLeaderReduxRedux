@@ -26,7 +26,7 @@ addMissionEventHandler ["GroupIconClick", {
         if (pl_add_group_to_hc) then {
             if (_group getVariable ["pl_not_addalbe", false]) exitWith {pl_add_group_to_hc = false; hint "Group cant be added!"};
             [_group ] spawn KMD_fnc_addToHcExecute;
-            [_group] spawn pl_set_up_ai;
+            [_group] spawn KMD_fnc_setupAi;
         };
         if (missionNamespace getVariable ["pl_select_formation_leader", false]) then {
             missionNamespace setVariable ["pl_formation_leader", _group];

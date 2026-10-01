@@ -63,7 +63,7 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
             (group (driver _targetVic)) setVariable ["setSpecial", true];
             (group (driver _targetVic)) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\takeoff_ca.paa"];
             playSound "beep";
-            driver _targetVic sideChat format ["%1: Moving to to rendez-vous location", groupId (group (driver _targetVic))];
+            driver _targetVic sideChat format ["%1: Moving to the rendez-vous location", groupId (group (driver _targetVic))];
             sleep 20;
             waitUntil {sleep 0.1; unitReady _targetVic or !alive _targetVic};
             playSound "beep";

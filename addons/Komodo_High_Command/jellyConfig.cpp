@@ -37,12 +37,6 @@ class RscHCGroupRootMenu
             cursorTexture="\A3\ui_f\data\igui\cfg\cursors\attack_ca.paa";
             priority=2;
         };
-        class EmptyBlank2: Empty1
-        {
-            title="command 3";
-            show="(1 - HCIsLeader) + (HCIsLeader * (1 - CursorOnGround)) + (HCCursorOnIconSelectable)";
-            enable="0";
-        };
         class Move
         {
             title="<img color='#e5e500' image='\A3\ui_f\data\igui\cfg\simpleTasks\types\move_ca.paa'/><t> Set Waypoint</t>";

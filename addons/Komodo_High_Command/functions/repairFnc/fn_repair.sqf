@@ -95,7 +95,7 @@ Original url: "Plmod\pl_repair_fnc.sqf"
                 sleep 0.1;
                 _vicGroup setGroupId [_vicGroupId];
                 sleep  0.1;
-                [_vicGroup] spawn pl_set_up_ai;
+                [_vicGroup] spawn KMD_fnc_setupAi;
                 sleep 4;
                 player hcSetGroup [_vicGroup];
                 [_vicGroup] spawn KMD_fnc_reset;

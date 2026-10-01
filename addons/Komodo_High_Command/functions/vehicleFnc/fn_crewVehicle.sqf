@@ -96,6 +96,7 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                 [_x] allowGetIn true;
                 [_x] orderGetIn true;
             } forEach (units _group);
+            _targetVic setVariable ["pl_rtb_pos", getPos _targetVic];
         }
         else
         {

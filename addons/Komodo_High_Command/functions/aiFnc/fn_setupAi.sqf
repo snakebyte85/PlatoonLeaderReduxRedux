@@ -23,7 +23,6 @@ _group allowFleeing 0;
 [_group] spawn KMD_fnc_ammoBearer;
 
 {
-    _x setSkill pl_ai_skill;
     if ((_x != player) or !(_x in switchableUnits)) then {
         _x unassignItem "Binocular";
         _x removeWeapon "Binocular";

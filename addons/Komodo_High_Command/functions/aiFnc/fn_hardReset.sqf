@@ -29,7 +29,6 @@ _newUnit setFace _face ;
 _newUnit setSpeaker _speaker ;
 _newUnit setDamage _damage;
 _newUnit setHit ["legs", 0];
-_newUnit setSkill pl_ai_skill;
 _newUnit setVariable ["pl_wia", false];
 _newUnit setVariable ["pl_unstuck_cd", 0];
 

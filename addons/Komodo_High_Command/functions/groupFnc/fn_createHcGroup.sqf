@@ -10,4 +10,4 @@ Original url: "Plmod\pl_group_fnc.sqf"
         [_x] join _group;
     } forEach (groupSelectedUnits player);
     player hcSetGroup [_group];
-    [_group] spawn pl_set_up_ai;
+    [_group] spawn KMD_fnc_setupAi;

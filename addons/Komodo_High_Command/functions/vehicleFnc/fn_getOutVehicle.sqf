@@ -189,6 +189,9 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
             // If Infantry is Transported
             if !(_vicTransport) then {
                 if (_vic isKindOf "Air") then {
+                
+                     _wp setWaypointType "MOVE";
+                
                     {
                         _x disableAI "AUTOCOMBAT";
                         _x disableAI "TARGET";
@@ -197,8 +200,15 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                     (group _commander) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\land_ca.paa"];
                     [_vic, 0] call KMD_fnc_doorAnimation;
                     sleep 40;
-                    // waitUntil {!alive _vic or (unitReady _vic)};
+                    waitUntil {sleep 0.1; unitReady _vic or !alive _vic};
+                    playSound "beep";
+                    driver _vic sideChat format ["%1: Beginning landing", groupId (group (driver _vic))];
+                    _vic land "GET OUT";
+                    sleep 10;
                     waitUntil {sleep 0.1; (isTouchingGround _vic) or !alive _vic};
+                    sleep 1;
+                    // waitUntil {!alive _vic or (unitReady _vic)};
+                    //waitUntil {sleep 0.1; (isTouchingGround _vic) or !alive _vic};
                     // for "_i" from count waypoints _group - 1 to 0 step -1 do {
                     //     deleteWaypoint [_group, _i];
                     // };

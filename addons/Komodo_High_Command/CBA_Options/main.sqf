@@ -3,20 +3,6 @@ missionNamespace setVariable ["KMD_Version", 0.11, true];
 private _versionName = ["Komodo's Platoon Leader ", KMD_Version] joinString "";
 
 [
-    "pl_ai_skill",
-    "SLIDER", 
-    ["Player Side Ai Skill", "Ai Skill Level for Player Side"], 
-	_versionName, 
-    [
-        0, 
-        1, 
-        0.8, 
-        2,
-        false
-    ]
-] call CBA_fnc_addSetting;
-
-[
     "pl_radio_range", 
     "SLIDER", 
     ["Radio Range", "Set the maximum range for ai info sharing"], 

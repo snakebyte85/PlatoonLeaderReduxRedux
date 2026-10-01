@@ -21,7 +21,7 @@ _newGroup = createGroup playerside;
     [_x] joinSilent _newGroup;
 } forEach (units _group);
 
-[_newGroup] spawn pl_set_up_ai;
+[_newGroup] spawn KMD_fnc_setupAi;
 deleteGroup _group;
 
 _newGroup setGroupId [_groupId];
