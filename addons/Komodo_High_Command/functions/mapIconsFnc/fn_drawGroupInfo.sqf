@@ -38,23 +38,16 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
                 _mapscaleX = _mapScale * _worldSizeX;
                 _mapScaleY = _mapScale * _worldSizeY;
                 _pos = getPosVisual (leader _x);
+                
+                _pos_callsignText = [(_pos select 0), (_pos select 1) + 5];
 
-
-                _callsignText = format ['  %1', groupId _x];
-                if (count (units _x) == 1 and _x != (group player)) then {
-                    _unitMos = getText (configFile >> 'CfgVehicles' >> typeOf (units _x select 0)>> 'displayName');
-                    if ((vehicle (units _x select 0)) != (units _x select 0)) then {
-                        _unitMos = getText (configFile >> 'CfgVehicles' >> typeOf (vehicle (units _x select 0))>> 'displayName');
-                        if ((vehicle (units _x select 0)) isKindOf 'Air') then {
-                            _unitMos = groupId _x;
-                        };
-                    };
-                    _callsignText = format ['  %1', _unitMos];
-                };
+                _callsignText = format ['  %1', groupId _x];                
+                _displayNameText = format ['  %1', [_x] call KMD_fnc_displayName];
+                
                 _display drawIcon [
                     '#(rgb,4,1,1)color(1,1,1,0)',
                     [0,0.3,0.6,1],
-                    _pos,
+                    _pos_callsignText,
                     25,
                     25,
                     0,
@@ -64,6 +57,42 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
                     'TahomaB',
                     'right'
                     ];
+                    
+                _display drawIcon [
+                    '#(rgb,4,1,1)color(1,1,1,0)',
+                    [0,0.3,0.6,1],
+                    _pos,
+                    25,
+                    25,
+                    0,
+                    _displayNameText,
+                    0,
+                    0.03,
+                    'TahomaB',
+                    'right'
+                    ];
+                    
+                    
+                if({ alive _x } count units _x == 0 ) exitWith {
+                
+                    _icon= '\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa';
+                    _color = switch (side _x) do {
+                        case west: { [0.0, 0.3, 0.6, 1.0] };
+                        case east: { [0.5, 0.0, 0.0, 1.0] };
+                        case independent: { [0.0, 0.5, 0.0, 1.0] };
+                        case civilian: { [0.4, 0.0, 0.5, 1.0] };
+                        default { [0.7, 0.6, 0.0, 1.0] };
+                        };
+                    
+                    _display drawIcon [
+                            _icon,
+                            _color,
+                            _pos,
+                            30,
+                            30,
+                            0
+                        ];
+                };
 
                 _strength = count (units _x);
                 _healthColor = [_x] call KMD_fnc_getGroupHealth;
@@ -155,5 +184,5 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
 
                 
             };
-        } forEach (allGroups select {side _x isEqualTo playerSide});
+        } forEach (allGroups select { side _x == playerSide });
     "];

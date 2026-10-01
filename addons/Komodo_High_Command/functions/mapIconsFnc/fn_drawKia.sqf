@@ -8,8 +8,8 @@ Original url: "Plmod\pl_map_icons.sqf"
     _markerName = str _unit;
     _marker = createMarker [_markerName, _pos];
     _markerName setMarkerSize [0.5, 0.5];
-    _markerName setMarkerType "mil_warning";
-    _markerName setMarkerColor "ColorBlufor";
+    _markerName setMarkerType "KIA";
+    _markerName setMarkerColor ([side (group _unit)] call KMD_fnc_sideToMarkerColor);
     _time = time + 60;
     waitUntil {time >= _time};
     deleteMarker _markerName;

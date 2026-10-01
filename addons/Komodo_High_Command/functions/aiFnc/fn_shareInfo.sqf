@@ -8,17 +8,19 @@ params [
 	["_group",nil,[grpNull]]
 ];
 
+format ["Enabling share info for %1", _group] call KMD_fnc_debug;
+
 _group setVariable ["spotRepEnabled", true];
 
-while {true} do {
+while { ({ alive _x } count units _group) > 0 } do {
     waitUntil {(behaviour (leader _group)) isEqualto "COMBAT"};
 
     _targets = [];
-
-    // [_targets] spawn pl_mark_targets_on_map;
 
     _targets = [(leader _group)] call KMD_fnc_getTargets;
     [_targets, (leader _group)] call KMD_fnc_revealTargets;
 
     sleep 20;
 };
+
+format ["No more share info for %1, group is dead", _group] call KMD_fnc_debug;

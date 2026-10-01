@@ -9,12 +9,18 @@ class RscHCGroupRootMenu
     {
         class Empty1
         {
-            title="";
+            title="<img color='#b20000' image='\A3\ui_f\data\igui\cfg\simpleTasks\types\target_ca.paa'/><t> Attack %POINTED_TARGET_NAME</t>";
             shortcuts[]={0};
-            command="";
-            show="HCIsLeader * (1 - HCCursorOnIconEnemy)";
-            enable="0";
+            command="-5";
+            cursorTexture = "\A3\ui_f\data\igui\cfg\cursors\assault_ca.paa";
+            show="HCIsLeader * HCCursorOnIconEnemy";
+            enable="HCNotEmpty";
             speechId=0;
+            priority=2;
+            class Params
+            {
+                expression = "['ATTACK',_pos,_is3D,hcselected player] call BIS_HC_path_menu";
+            };
         };
         class EmptyBlank1: Empty1
         {
@@ -861,7 +867,7 @@ class RscHCGroupRootMenu
                 shortcuts[] = {7};
                 class Params
                 {
-                    expression = "{[_x] call KMD_fnc_hold} forEach (hcSelected player)";
+                    expression = "{[_x] call KMD_fnc_holdFire} forEach (hcSelected player)";
                 };
                 title = "<img color='#191999' image='\A3\ui_f\data\igui\cfg\simpleTasks\types\target_ca.paa'/><t> Hold Fire</t";
                 shortcutsAction = "CommandingMenu6";

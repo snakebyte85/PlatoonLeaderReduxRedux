@@ -5,11 +5,11 @@
     if ((_hcs in (synchronizedObjects _leader)) and (vehicle _leader != _leader)) then {
         if (((assignedVehicleRole _leader) select 0) isEqualTo "cargo") then {
             [_x] call KMD_fnc_infTransportSetup;
-            [_x, true] spawn KMD_fnc_contactReport;
+            //[_x, true] spawn KMD_fnc_contactReport;
         };
         if !(isNull (isVehicleCargo (vehicle _leader))) then {
             [_x] call KMD_fnc_vicTransportSetup;
-            [_x, true] spawn KMD_fnc_contactReport;
+            //[_x, true] spawn KMD_fnc_contactReport;
 
         };
 

@@ -97,6 +97,9 @@ class CfgFunctions
 			class groupIconClickEh    {};
 			class entityKilledEh      {};
 			class vehicleGroupCheck   {};
+            class sideToMarkerColor   {};
+            class displayName         {};
+            class debug               {};
 		};
 
 		class aiFnc
@@ -113,7 +116,6 @@ class CfgFunctions
 			class contactReport        {};
 
 			class playerReport         {};
-			class enemyDestroyedReport {};
 			class autoCrouch           {};
 			class medicalSetup         {};
 			class onDamage             {};
@@ -207,11 +209,7 @@ class CfgFunctions
 		class supportFnc
 		{
 			file = "\Komodo_High_Command\functions\supportFnc";
-			class supportStatus   {};
-			class cas             {};
-			class arty            {};
 			class fireMortar      {};
-			class interdictionCas {};
 			
 		};
 
@@ -239,8 +237,6 @@ class CfgFunctions
 			class onMapMortar         {};
 			class showFireSupportMenu {};
 			class showCssMenu         {};
-			class showCasMenu         {};
-			class showArtyMenu        {};
 			class showMortarMenu      {};
 			class menuArrayVariables  {};
 		}

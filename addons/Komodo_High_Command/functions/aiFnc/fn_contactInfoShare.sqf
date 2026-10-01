@@ -9,7 +9,7 @@ sleep 7;
 _targets = [];
 _targets = [_unit] call KMD_fnc_getTargets;
 
-[_targets, _unit] call KMD_fnc_revealTargets;
+//[_targets, _unit] call KMD_fnc_revealTargets;
 
 [_targets] spawn KMD_fnc_markTargetsOnMap;
 
