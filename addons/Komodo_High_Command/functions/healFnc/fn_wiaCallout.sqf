@@ -13,5 +13,5 @@ if (alive _unit and (_unit getVariable "pl_wia_calledout")) then {
     _unitMos = getText (configFile >> "CfgVehicles" >> typeOf _unit >> "displayName");
     // leader (group _unit) sideChat format ["%1 is W.I.A, requesting Medic, over", _unitMos];
     playSound "beep";
-    leader (group _unit) sideChat format ["%1: %2 WOUNDED", groupId (group _unit), _unitMos];
+    leader (group _unit) sideChat format ["%1 WOUNDED", _unitMos];
 };

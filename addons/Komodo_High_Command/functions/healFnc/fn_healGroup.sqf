@@ -3,7 +3,7 @@ Original name: pl_heal_group
 New name:      KMD_fnc_healGroup
 Original url: "Plmod\pl_heal_fnc.sqf"
 */
-    params ["_group"];
+    params ["_group", ["_targetGroup", objNull]];
     private ["_medic", "_healTarget", "_escort"];
 
     if (vehicle (leader _group) != leader _group) exitWith {hint "Infantry ONLY Task!"};
@@ -30,6 +30,11 @@ Original url: "Plmod\pl_heal_fnc.sqf"
             // _medic disableAI "FSM";
             _medic disableAI "AUTOCOMBAT";
             sleep 2;
+            
+            if(isNull _targetGroup) then {
+                _targetGroup = _group;
+            };
+            
             while {(_group getVariable "onTask")} do {
                 // if (_group isEqualTo grpNull) exitWith {};
                 // _reviveTargets = (getPos leader _group) nearObjects ["Man", 50];
@@ -38,14 +43,14 @@ Original url: "Plmod\pl_heal_fnc.sqf"
                         _h1 = [_group, _medic, nil, _x, getPos (leader _group), 50] spawn KMD_fnc_ccpReviveAction;
                         waitUntil {sleep 0.1; scriptDone _h1 or !(_group getVariable ["onTask", true])}
                     };
-                } forEach ((units _group) select {_x getVariable ["pl_wia", false]});;
+                } forEach ((units _targetGroup) select {_x getVariable ["pl_wia", false]});;
                 // _medic sideChat "Tick";
                 {
                     if ((_x getVariable "pl_injured") and (alive _x) and !(_x getVariable "pl_wia") and !(lifeState _x isEqualTo "INCAPACITATED")) then {
                         _h1 = [_medic, _x, nil] spawn KMD_fnc_medicHeal;
                         waitUntil {sleep 0.1; scriptDone _h1 or !(_group getVariable ["onTask", true])}
                     };
-                } forEach (units _group);
+                } forEach (units _targetGroup);
                 sleep 1;
             };
 
@@ -62,5 +67,5 @@ Original url: "Plmod\pl_heal_fnc.sqf"
     else
     {
         // playSound "beep";
-        hint "Medic is Kia!";
+        hint "The group has no medic!";
     };

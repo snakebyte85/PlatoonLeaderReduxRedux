@@ -33,16 +33,16 @@ private ["_box", "_magAmount"];
             
                 _boxName = getText (configFile >> "CfgVehicles" >> typeOf _box >> "displayName");
                 playSound "beep";
-                (leader _x) sideChat format ["%1: Resupplying at %2", (groupId _x), _boxName];
+                (leader _x) sideChat format ["Resupplying at %1", _boxName];
 
                 {
-                    [_x, _box] spawn pl_rearm; 
+                    [_x, _box] spawn KMD_fnc_rearm; 
                 } forEach units _x;
             }
             else
             {
                 playSound "beep";
-                leader _x sideChat "Negativ, There are no avaiable Supplies, Over";
+                hint "No avaiable Supplies!";
             };
         }
         else
@@ -60,9 +60,9 @@ private ["_box", "_magAmount"];
                     _x setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\rearm_ca.paa"];
                     _boxName = getText (configFile >> "CfgVehicles" >> typeOf _box >> "displayName");
                     playSound "beep";
-                    (leader _x) sideChat format ["%1: Resupplying at %2", (groupId _x), _boxName];
+                    (leader _x) sideChat format ["Resupplying at %1", _boxName];
                     {
-                        [_x, _box] spawn pl_rearm; 
+                        [_x, _box] spawn KMD_fnc_rearm; 
                     } forEach units _x;
                 }
                 else

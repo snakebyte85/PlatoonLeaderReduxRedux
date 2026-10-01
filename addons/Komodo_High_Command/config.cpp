@@ -1,3 +1,4 @@
+#include "script_version.hpp"
 #include "BIS_AddonInfo.hpp"
 #include "config\cfgPatches.cpp"
 #include "config\preinit.cpp"

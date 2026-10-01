@@ -6,8 +6,9 @@ Original url: "Plmod\pl_group_fnc.sqf"
     params ["_group"];
     {
         if (_x != (leader _group)) then {
-            _newGroup = createGroup [west, true];
+            _newGroup = createGroup [side _x, true];
             [_x] joinSilent _newGroup;
-            player hcSetGroup [_newGroup]
+            player hcSetGroup [_newGroup];
+            [_newGroup] spawn KMD_fnc_setupAi;
         };
     } forEach (units _group);

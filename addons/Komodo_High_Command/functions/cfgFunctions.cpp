@@ -1,11 +1,11 @@
 class CfgFunctions
-{
+{    
 	class  KMD
 	{
 		class init
 		{
 			file = "\Komodo_High_Command\functions\init";
-			class initHighCommand {postInit = 1};
+			class initHighCommand {postInit = 1;};
 			class globalVariables {};
 			class strImgVars      {};
 			class classVars       {};
@@ -38,7 +38,7 @@ class CfgFunctions
 			class drawBoundingLine           {};
 			class drawFollowMarkerOther      {};
 			class drawFollowMarkerOtherSetup {};
-			class drawLeftVehicles           {};
+			class drawGroupsGettingIn        {};
 			class markTargetsOnMap           {};
 			class drawKia                    {};
 		};
@@ -53,6 +53,8 @@ class CfgFunctions
 			class removeFromHC      {};
 			class spawnRemoveFromHC {};
 			class createHcGroup     {};
+            class resetHCBar        {};
+            class renameHCGroup     {};
 		};
 
 		class healFnc
@@ -97,6 +99,11 @@ class CfgFunctions
 			class groupIconClickEh    {};
 			class entityKilledEh      {};
 			class vehicleGroupCheck   {};
+            class sideToColor         {};
+            class sideToMarkerColor   {};
+            class vehicleToIcon       {};
+            class displayName         {};
+            class debug               {};
 		};
 
 		class aiFnc
@@ -113,7 +120,6 @@ class CfgFunctions
 			class contactReport        {};
 
 			class playerReport         {};
-			class enemyDestroyedReport {};
 			class autoCrouch           {};
 			class medicalSetup         {};
 			class onDamage             {};
@@ -126,10 +132,7 @@ class CfgFunctions
 			class resetGroup           {};
 			class hardReset            {};
 			class spawnHardReset       {};
-			class chVehicleDir         {};
 			class resetVehicle         {};
-
-			class ammoBearer           {};
 
 		};
 
@@ -160,6 +163,7 @@ class CfgFunctions
 			class vicTransportSetup      {};
 			class infTransportSetup      {};
 			class initTransportAndEvents {};
+            class land                   {};
 		};
 
 		class buildingFnc
@@ -207,11 +211,7 @@ class CfgFunctions
 		class supportFnc
 		{
 			file = "\Komodo_High_Command\functions\supportFnc";
-			class supportStatus   {};
-			class cas             {};
-			class arty            {};
 			class fireMortar      {};
-			class interdictionCas {};
 			
 		};
 
@@ -239,10 +239,8 @@ class CfgFunctions
 			class onMapMortar         {};
 			class showFireSupportMenu {};
 			class showCssMenu         {};
-			class showCasMenu         {};
-			class showArtyMenu        {};
 			class showMortarMenu      {};
 			class menuArrayVariables  {};
-		}
+		};
 	};
 };

@@ -1,0 +1,9 @@
+    params ["_side"];
+    private _color = switch (_side) do {
+        case west: { [0.0, 0.3, 0.6, 1.0] };
+        case east: { [0.5, 0.0, 0.0, 1.0] };
+        case independent: { [0.0, 0.5, 0.0, 1.0] };
+        case civilian: { [0.4, 0.0, 0.5, 1.0] };
+        default { [0.7, 0.6, 0.0, 1.0] };
+    };
+    _color;

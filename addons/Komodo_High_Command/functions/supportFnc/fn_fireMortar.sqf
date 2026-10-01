@@ -34,7 +34,7 @@ Original url: "Plmod\pl_support_fnc.sqf"
     playSound "beep";
     (gunner (pl_mortars#0)) sideChat "Fire Mission Confirmed, over";
 
-    sleep 3,
+    sleep 3;
     {
         _x commandArtilleryFire [_cords, "8Rnd_82mm_Mo_shells", pl_mortar_rounds];
         sleep 0.7;

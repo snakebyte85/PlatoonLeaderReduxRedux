@@ -5,7 +5,7 @@ Original url: "Plmod\pl_misc_fnc.sqf"
 */
 
     params ["_group"];
-    private ["_cords", "_f"], "_mwp";
+    private ["_cords", "_f", "_mwp"];
 
     if (visibleMap) then {
         _cords = (findDisplay 12 displayCtrl 51) ctrlMapScreenToWorld getMousePosition;

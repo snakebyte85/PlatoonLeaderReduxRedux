@@ -4,6 +4,8 @@ New name:      KMD_fnc_transferMedic
 Original url: "Plmod\pl_heal_fnc.sqf"
 */
     private ["_destMedic", "_srcMedic", "_srcGroup", "_destGroup"];
+    
+    if( count (hcSelected player) > 1) exitWith { hint "Select only one group!" };
 
     _srcGroup = hcSelected player select 0;
 

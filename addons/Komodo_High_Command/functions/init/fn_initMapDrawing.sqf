@@ -10,5 +10,5 @@ isNil{// forced uncsheduled execution (14x faster)
     call KMD_fnc_drawBoundingLine;
     call KMD_fnc_drawFollowMarkerOther;
     call KMD_fnc_drawFollowMarkerOtherSetup;
-    call KMD_fnc_drawLeftVehicles;
+    call KMD_fnc_drawGroupsGettingIn;
 };

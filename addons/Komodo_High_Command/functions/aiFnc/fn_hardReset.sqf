@@ -34,15 +34,14 @@ _newUnit setVariable ["pl_unstuck_cd", 0];
 
 // [_newUnit] spawn KMD_fnc_autoCrouch;
 
-if (pl_enabled_medical) then {
-    [_newUnit] call KMD_fnc_medicalSetup; 
-    sleep 0.1;
-    if (_unitWia) then {
-        _newUnit setUnconscious true;
-        _newUnit setVariable ["pl_bleedout_time", 150];
-        sleep 2;
-        _newUnit setVariable ["pl_wia", true];
-        sleep 1;
-        [_newUnit] spawn KMD_fnc_bleedOut;
-    };
+
+[_newUnit] call KMD_fnc_medicalSetup; 
+sleep 0.1;
+if (pl_enable_revival && _unitWia) then {
+    _newUnit setUnconscious true;
+    _newUnit setVariable ["pl_bleedout_time", 150];
+    sleep 2;
+    _newUnit setVariable ["pl_wia", true];
+    sleep 1;
+    [_newUnit] spawn KMD_fnc_bleedOut;
 };
