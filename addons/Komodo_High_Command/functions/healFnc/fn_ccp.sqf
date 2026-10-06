@@ -71,7 +71,7 @@ Original url: "Plmod\pl_heal_fnc.sqf"
             _markerNameCCP = str (random 3);
             createMarker [_markerNameCCP, getPos (leader _group)];
             _markerNameCCP setMarkerType "marker_CCP";
-            _markerNameCCP setMarkerColor [side _group] call KMD_fnc_sideToMarkerColor;
+            _markerNameCCP setMarkerColor ([side _group] call KMD_fnc_sideToMarkerColor);
 
             _ccpPos = getPos (leader _group);
 
