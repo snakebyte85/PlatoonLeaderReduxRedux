@@ -8,7 +8,7 @@ Original url: "Plmod\init.sqf"
         _vicArray = [];
         {
             if (vehicle _x != _x) then {
-                0 = _vicArray pushBackUnique (vehicle _x);
+                _vicArray pushBackUnique (vehicle _x);
             };
         } forEach (units _x);
 

@@ -9,12 +9,7 @@ Original url: "Plmod\pl_heal_fnc.sqf"
 
     // _group = hcSelected player select 0;
     if (vehicle (leader _group) != leader _group) exitWith {hint "Infantry ONLY Task!"};
-
-    if (_group != (group player) and !(_isMedevac)) exitWith {
-        // playSound "beep";
-        hint "Only the Player Group can set up the CCP";
-    };
-    
+ 
 
     // _medic = ((units _group) select {(typeOf _x) in pl_medic_cls_names}) select 0;
     {
@@ -55,13 +50,15 @@ Original url: "Plmod\pl_heal_fnc.sqf"
             _medic setVariable ["pl_damage_reduction", true];
             _medic setVariable ["pl_is_ccp_medic", true];
 
-            _markerNameOuter = str (random 2);
-            createMarker [_markerNameOuter, getPos (leader _group)];
-            _markerNameOuter setMarkerShape "ELLIPSE";
-            _markerNameOuter setMarkerBrush "DiagGrid";
-            _markerNameOuter setMarkerColor "colorBLUFOR";
-            _markerNameOuter setMarkerAlpha 0.4;
-            _markerNameOuter setMarkerSize [pl_ccp_revive_range, pl_ccp_revive_range];
+            if(pl_enable_revival) then {
+                _markerNameOuter = str (random 2);
+                createMarker [_markerNameOuter, getPos (leader _group)];
+                _markerNameOuter setMarkerShape "ELLIPSE";
+                _markerNameOuter setMarkerBrush "DiagGrid";
+                _markerNameOuter setMarkerColor "colorBLUFOR";
+                _markerNameOuter setMarkerAlpha 0.4;
+                _markerNameOuter setMarkerSize [pl_ccp_revive_range, pl_ccp_revive_range];
+            };
 
             _markerNameInner = str (random 2);
             createMarker [_markerNameInner, getPos (leader _group)];
@@ -74,7 +71,7 @@ Original url: "Plmod\pl_heal_fnc.sqf"
             _markerNameCCP = str (random 3);
             createMarker [_markerNameCCP, getPos (leader _group)];
             _markerNameCCP setMarkerType "marker_CCP";
-            _markerNameCCP setMarkerColor "colorBLUFOR";
+            _markerNameCCP setMarkerColor [side _group] call KMD_fnc_sideToMarkerColor;
 
             _ccpPos = getPos (leader _group);
 
@@ -82,8 +79,13 @@ Original url: "Plmod\pl_heal_fnc.sqf"
 
             while {(_group getVariable ["onTask", true]) and (alive _medic) and !(_medic getVariable ["pl_wia", false])} do {
                 // player sideChat "Loop is da";
-                _reviveTargets = _ccpPos nearObjects ["Man", pl_ccp_revive_range];
+                _reviveTargets = [];
+                if(pl_enable_revival) then {
+                    _reviveTargets = _ccpPos nearObjects ["Man", pl_ccp_revive_range];
+                };
                 _healTargets = _ccpPos nearObjects ["Man", pl_ccp_heal_range];
+                
+                               
                 {
                     if (_x getVariable ["pl_wia", false] and !(_x getVariable "pl_beeing_treatet")) then {
                         if !(isNil "_escort") then {
@@ -97,6 +99,8 @@ Original url: "Plmod\pl_heal_fnc.sqf"
                         };
                     };
                 } forEach (_reviveTargets select {_x getVariable ["pl_wia", false]});
+                
+                
                 {
                     if ((_x getVariable "pl_injured") and (alive _x) and !(_x getVariable "pl_wia")) then {
                         _h2 = [_medic, _x, _ccpPos] spawn KMD_fnc_medicHeal;
@@ -119,7 +123,9 @@ Original url: "Plmod\pl_heal_fnc.sqf"
                 _escort setVariable ["pl_is_ccp_medic", false];
             };
             deleteMarker _markerNameCCP;
-            deleteMarker _markerNameOuter;
+            if(pl_enable_revival) then {
+                deleteMarker _markerNameOuter;
+            };
             deleteMarker _markerNameInner;
         }
         else
@@ -131,5 +137,5 @@ Original url: "Plmod\pl_heal_fnc.sqf"
     else
     {
         // playSound "beep";
-        hint "Medic is KIA";
+        hint "The group has no medic!";
     };

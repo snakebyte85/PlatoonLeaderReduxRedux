@@ -47,8 +47,8 @@ Original url: "Plmod\pl_misc_fnc.sqf"
     };
 
     if !(!(_isNotWp) and (_group getVariable ["pl_formation_leader", false])) then {
-        _group setVariable ["onTask", false];
-        if !((_group getVariable "specialIcon") isEqualTo "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa") then {
+        _group setVariable ["onTask", false];        
+        if !((_group getVariable "specialIcon") isEqualTo pl_cargo_icon) then {
             _group setVariable ["setSpecial", false];
         };
     };

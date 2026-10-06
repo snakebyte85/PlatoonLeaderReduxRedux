@@ -18,11 +18,14 @@ addMissionEventHandler ["Draw3D", {
 
             _offset = 0.03 * _distance;
             _dir = (getPosATLVisual player) getDir _pos;
+            
+            _color = [side _x] call KMD_fnc_sideToColor;
+            _color set[3, 0.7];
 
             _callsignText = format ["%1 (%2m)", (groupId _x), _distance];
             drawIcon3D [
                 '',
-                [0,0.3,0.6,0.7],
+                _color,
                 [(_pos select 0),(_pos select 1), 5 + _offset],
                 0,
                 0,

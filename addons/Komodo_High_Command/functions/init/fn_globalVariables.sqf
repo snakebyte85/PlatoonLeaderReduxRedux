@@ -23,7 +23,7 @@ pl_convoy_pos            = 0;
 pl_convoy_array          = [];
 pl_draw_convoy_array     = [];
 pl_convoy_path_marker    = [];
-pl_left_vehicles         = [];
+pl_groups_getting_in     = createHashMap;
 
 pl_covers                = [];
 pl_defence_cords         = [0,0,0];
@@ -40,31 +40,9 @@ pl_follow_array  = [];
 pl_follow_array_other = [];
 pl_follow_array_other_setup = [];
 
-pl_cas_cords = [0,0,0];
 pl_arty_cords = [0,0,0];
 pl_mapClicked = false;
-pl_cas_gun_cd = 0;
-pl_cas_gun_rocket_cd = 0;
-pl_cas_cluster_cd = 0;
-pl_cas_jdam_cd = 0;
-pl_plane_sad_cd = 0;
-pl_helo_sad_cd = 0;
-pl_uav_sad_cd = 0;
-pl_medevac_sad_cd = 0;
-pl_gun_enabled = 1;
-pl_gun_rocket_enabled = 1;
-pl_cluster_enabled = 1;
-pl_jdam_enabled = 1;
-pl_plane_sad_enabled = 1;
-pl_helo_sad_enabled = 1;
-pl_uav_sad_enabled = 1;
-pl_medevac_sad_enabled = 1;
-pl_sorties = parseNumber pl_sorties;
-pl_arty_ammo = parseNumber pl_arty_ammo;
 pl_cancel_strike = false;
-pl_arty_rounds = 3;
-pl_arty_dispersion = 75;
-pl_arty_delay = 5;
 pl_mortar_rounds = 4;
 pl_arty_cords = [0,0,0];
 pl_show_dead_vehicles = false;
@@ -73,13 +51,17 @@ pl_maintenance_area = 45;
 pl_3dIcon_select_cd = 0;
 pl_vehicle_destroyed_report_cd = 0;
 
-if (pl_cas_enabled) then {pl_cas_enabled = 1;} else {pl_cas_enabled = 0;};
-if (pl_arty_enabled) then {pl_arty_enabled = 1;} else {pl_arty_enabled = 0;};
+pl_show_medical = 1;
 
-if (pl_enabled_medical) then {pl_show_medical = 1} else {pl_show_medical = 0};
+pl_additional_engVic="[]";
+pl_enable_vehicle_recovery=false;
 if (pl_enable_vehicle_recovery) then {pl_show_vehicle_recovery = 1} else {pl_show_vehicle_recovery = 0};
 
 pl_mortars = [];
+
+pl_cargo_icon = "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa";
+
+pl_group_rename = nil;
 
 call KMD_fnc_classVars;
 call KMD_fnc_strImgVars;

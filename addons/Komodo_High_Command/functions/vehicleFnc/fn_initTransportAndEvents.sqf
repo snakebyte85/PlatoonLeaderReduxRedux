@@ -5,11 +5,11 @@
     if ((_hcs in (synchronizedObjects _leader)) and (vehicle _leader != _leader)) then {
         if (((assignedVehicleRole _leader) select 0) isEqualTo "cargo") then {
             [_x] call KMD_fnc_infTransportSetup;
-            [_x, true] spawn KMD_fnc_contactReport;
+            //[_x, true] spawn KMD_fnc_contactReport;
         };
         if !(isNull (isVehicleCargo (vehicle _leader))) then {
             [_x] call KMD_fnc_vicTransportSetup;
-            [_x, true] spawn KMD_fnc_contactReport;
+            //[_x, true] spawn KMD_fnc_contactReport;
 
         };
 
@@ -19,27 +19,21 @@
 
 player addEventHandler ["GetInMan", {
     params ["_vehicle", "_role", "_unit", "_turret"];
-    private ["_group"];
+    private ["_group", "_vicGroup", "_icon"];
     _group = group player;
     _vicGroup = group (driver (vehicle player));
     _vicGroup setVariable ["setSpecial", true];
-    _vicGroup setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\truck_ca.paa"];
+    _vicGroup setVariable ["specialIcon", pl_cargo_icon];
     player setVariable ["pl_player_vicGroup", _vicGroup];
-    if (_vicGroup != (group player)) then {
-        _group setVariable ["pl_show_info", false];
-        player hcRemoveGroup _group;
-    };
 }];
 
 player addEventHandler ["GetOutMan", {
     params ["_vehicle", "_role", "_unit", "_turret"];
-    private ["_group"];
+    private ["_group", "_vicGroup", "_cargo"];
     _group = group player;
     _vicGroup = player getVariable ["pl_player_vicGroup", (group player)];
     _group setVariable ["setSpecial", false];
     _group setVariable ["onTask", false];
-    _group setVariable ["pl_show_info", true];
-    player hcSetGroup [_group];
 
     _cargo = fullCrew [(vehicle ((units _vicGroup)#0)), "cargo", false];
     if ((count _cargo == 0)) exitWith {

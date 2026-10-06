@@ -1,7 +1,7 @@
-#include "\a3\editor_f\Data\Scripts\dikCodes.h"
+#include "\a3\ui_f\hpp\definedikcodes.inc"
 
 [
-	_versionName,
+	_category,
 	"Select HC Group", 
 	"Selects the HC-Group of the Unit the player aims at", 
 	{_this spawn KMD_fnc_selectGroup}, 
@@ -11,7 +11,7 @@
 ] call CBA_fnc_addKeybind;
 
 [
-	_versionName,
+	_category,
 	"hcSquadIn_key", 
 	"Remote View Leader of HC Group", 
 	{_this spawn KMD_fnc_spawnCam}, 
@@ -21,7 +21,7 @@
 ] call CBA_fnc_addKeybind;
 
 [
-	_versionName,
+	_category,
 	"hcSquadOut_key", 
 	"Release Remote View", 
 	{_this spawn KMD_fnc_remoteCameraOut}, 

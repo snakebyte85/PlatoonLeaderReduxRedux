@@ -8,17 +8,23 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
         {
             if (hcShownBar and (_x getVariable 'pl_show_info')) then {
                 if ((getText (configFile >> 'CfgVehicles' >> typeOf (units _x select 0)>> 'displayName')) isEqualTo 'Game Logic') exitWith {};
+                
                 {
                     _unit = _x;
                     _icon = getText (configfile >> 'CfgVehicles' >> typeof _unit >> 'icon');
                     _size = 15;
-                    _unitColor = [0,0.3,0.6,0.65];
+                    _unitColor = [side _unit] call KMD_fnc_sideToColor;
+                    _unitColor set[3, 0.65];                    
                     if (_unit getVariable 'pl_is_ccp_medic' and (alive _unit)) then {
                         _unitColor = [0.4,1,0.2,0.65];
+                    };
+                    if (_unit getVariable 'pl_injured') then {
+                        _unitColor = [0.8,0.8,0,0.65];
                     };
                     if (_unit getVariable 'pl_wia') then {
                         _unitColor = [0.7,0,0,0.65];
                     };
+                    
                     if (vehicle _unit == _unit and (alive _unit)) then {
                         _display drawIcon [
                             _icon,
@@ -31,6 +37,7 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
                     };
                 } forEach (units _x);
 
+                _color = [side _x] call KMD_fnc_sideToColor;
 
                 _worldSizeX = round (worldSize * 0.03);
                 _worldSizeY = round (worldSize * 0.02);
@@ -38,23 +45,16 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
                 _mapscaleX = _mapScale * _worldSizeX;
                 _mapScaleY = _mapScale * _worldSizeY;
                 _pos = getPosVisual (leader _x);
+                
+                _pos_callsignText = [(_pos select 0), (_pos select 1) + 5];
 
-
-                _callsignText = format ['  %1', groupId _x];
-                if (count (units _x) == 1 and _x != (group player)) then {
-                    _unitMos = getText (configFile >> 'CfgVehicles' >> typeOf (units _x select 0)>> 'displayName');
-                    if ((vehicle (units _x select 0)) != (units _x select 0)) then {
-                        _unitMos = getText (configFile >> 'CfgVehicles' >> typeOf (vehicle (units _x select 0))>> 'displayName');
-                        if ((vehicle (units _x select 0)) isKindOf 'Air') then {
-                            _unitMos = groupId _x;
-                        };
-                    };
-                    _callsignText = format ['  %1', _unitMos];
-                };
+                _callsignText = format ['  %1', groupId _x];                
+                _displayNameText = format ['  %1', [_x] call KMD_fnc_displayName];
+                
                 _display drawIcon [
                     '#(rgb,4,1,1)color(1,1,1,0)',
-                    [0,0.3,0.6,1],
-                    _pos,
+                    _color,
+                    _pos_callsignText,
                     25,
                     25,
                     0,
@@ -64,6 +64,35 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
                     'TahomaB',
                     'right'
                     ];
+                    
+                _display drawIcon [
+                    '#(rgb,4,1,1)color(1,1,1,0)',
+                    _color,
+                    _pos,
+                    25,
+                    25,
+                    0,
+                    _displayNameText,
+                    0,
+                    0.03,
+                    'TahomaB',
+                    'right'
+                    ];
+                    
+                    
+                if({ alive _x } count units _x == 0 ) exitWith {
+                
+                    _icon= '\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa';
+                    
+                    _display drawIcon [
+                            _icon,
+                            _color,
+                            _pos,
+                            30,
+                            30,
+                            0
+                        ];
+                };
 
                 _strength = count (units _x);
                 _healthColor = [_x] call KMD_fnc_getGroupHealth;
@@ -155,5 +184,5 @@ findDisplay 12 displayCtrl 51 ctrlAddEventHandler ["Draw","
 
                 
             };
-        } forEach (allGroups select {side _x isEqualTo playerSide});
+        } forEach (allGroups select { side _x == playerSide });
     "];

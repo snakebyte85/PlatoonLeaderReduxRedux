@@ -79,10 +79,10 @@ Original url: "Plmod\pl_support_fnc.sqf"
     pl_sorties = pl_sorties - _sortiesCost;
 
     switch (_key) do { 
-        case 1 : {pl_gun_enabled = 0, _type = 0, _plane = 'B_Plane_CAS_01_F', _cs = 'Viper 1'};
-        case 2 : {pl_gun_rocket_enabled = 0, _type = 2, _plane = 'B_Plane_CAS_01_F', _cs = 'Viper 4'};
-        case 3 : {pl_cluster_enabled = 0,  _type = 3, _plane = 'B_Plane_Fighter_01_Cluster_F', _cs = 'Black Knight 2'}; 
-        case 4 : {pl_jdam_enabled = 0,  _type = 3, _plane = 'B_Plane_Fighter_01_F', _cs = 'Stroke 3'};
+        case 1 : {pl_gun_enabled = 0; _type = 0; _plane = 'B_Plane_CAS_01_F'; _cs = 'Viper 1'};
+        case 2 : {pl_gun_rocket_enabled = 0; _type = 2; _plane = 'B_Plane_CAS_01_F'; _cs = 'Viper 4'};
+        case 3 : {pl_cluster_enabled = 0;  _type = 3; _plane = 'B_Plane_Fighter_01_Cluster_F'; _cs = 'Black Knight 2'}; 
+        case 4 : {pl_jdam_enabled = 0;  _type = 3; _plane = 'B_Plane_Fighter_01_F'; _cs = 'Stroke 3'};
         default {sleep 0.1}; 
     };
     sleep 1;

@@ -94,12 +94,6 @@ _targets = [(leader _group)] call KMD_fnc_getTargets;
 
 if ((count _targets) > 0) then {
 
-    if ((_group getVariable "sitrepCd") < time) then {
-        [_targets] spawn KMD_fnc_markTargetsOnMap;
-        [_targets, (leader _group)] call KMD_fnc_revealTargets;
-        _group setVariable ["sitrepCd", time + 30];
-    };
-
     _manSpotted = "Man" countType _targets;
     _tankSpotted = "Tank" countType _targets;
     _carSpotted = "Car" countType _targets;
@@ -108,15 +102,24 @@ if ((count _targets) > 0) then {
     _message = _message + format ["
     <br /><br />
     <t color='#7f0000' size='1.3' align='center' underline='1'>CONTACTS</t>
-    <br /><br />
-    <img align='left' image='\A3\ui_f\data\map\markers\nato\o_inf.paa'/><t size='0.9' align='center'>INF</t><t size='0.9' align='right'>%1x</t>
-    <br />
-    <img align='left' image='\A3\ui_f\data\map\markers\nato\o_armor.paa'/><t size='0.9' align='center'>ARM</t><t color='#ffffff' size='0.9' align='right'>%2x</t>
-    <br />
-    <img align='left' image='\A3\ui_f\data\map\markers\nato\o_motor_inf.paa'/><t size='0.9' align='center'>MOT</t><t color='#ffffff' size='0.9' align='right'>%3x</t>
-    <br />
-    <img align='left' image='\A3\ui_f\data\map\markers\nato\o_air.paa'/><t size='0.9' align='center'>AIR</t><t color='#ffffff' size='0.9' align='right'>%4x</t>
-    ",_manSpotted, _tankSpotted, _carSpotted, _airSpotted];
+    <br /><br />"];
+    
+    if( _manSpotted > 0 ) then {
+        _message = _message + format["<img align='left' image='\A3\ui_f\data\map\markers\nato\o_inf.paa'/><t size='0.9' align='center'>INF</t><t size='0.9' align='right'>%1x</t>
+    <br />", _manSpotted];
+    };
+    
+    if( _tankSpotted > 0 ) then {
+        _message = _message + format["<img align='left' image='\A3\ui_f\data\map\markers\nato\o_armor.paa'/><t size='0.9' align='center'>ARM</t><t color='#ffffff' size='0.9' align='right'>%1x</t><br />", _tankSpotted];
+    };
+    
+    if( _carSpotted > 0 ) then {
+        _message = _message + format["<img align='left' image='\A3\ui_f\data\map\markers\nato\o_motor_inf.paa'/><t size='0.9' align='center'>MOT</t><t color='#ffffff' size='0.9' align='right'>%1x</t><br />", _carSpotted];
+    };
+    
+    if( _airSpotted > 0 ) then {
+        _message = _message + format["<img align='left' image='\A3\ui_f\data\map\markers\nato\o_air.paa'/><t size='0.9' align='center'>AIR</t><t color='#ffffff' size='0.9' align='right'>%1x</t>",_airSpotted];
+    };
 
 }
 else
@@ -125,7 +128,7 @@ else
     <br /><br />
     <t color='#7f0000' size='1.3' align='center' underline='1'>CONTACTS</t>
     <br /><br />
-    <t color='#7f0000' size='1' align='center'>Unknown Enemy Contacts</t>
+    <t color='#7f0000' size='1' align='center'>No Enemy Contacts</t>
     ";
 };
 hint parseText _message;

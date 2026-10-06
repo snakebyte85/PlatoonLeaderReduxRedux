@@ -7,6 +7,8 @@ params ["_vic"];
 
 if (_vic isKindOf "Air") exitWith {};
 
+//format ["Vehicle setup for %1", _vic] call KMD_fnc_debug;
+
 _vic setUnloadInCombat [false, false];
     
 if (isNil {_vic getVariable "pl_vehicle_setup_complete"}) then {

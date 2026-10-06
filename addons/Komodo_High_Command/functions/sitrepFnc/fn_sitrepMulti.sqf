@@ -52,17 +52,12 @@ Original url: "Plmod\pl_sitrep_fnc.sqf"
 
         _groupInfo pushBack [_callsign, _strength, _healthState, _ammoState, _taskIcon, _contactIconColor, _groupStatus];
 
-        _targets = [(leader _group)] call pl_get_targets;
+        _targets = [(leader _group)] call KMD_fnc_getTargets;
         _targetsAll append _targets;
     } forEach _groups;
 
     _targetsAll = _targetsAll arrayIntersect _targetsAll;
 
-    if (pl_sitrep_multi_cd < time) then {
-        [_targetsAll] spawn KMD_fnc_markTargetsOnMap;
-        [_targetsAll, player] call KMD_fnc_revealTargets;
-        pl_sitrep_multi_cd = time + 30;
-    };
     _targetsAmount = count _targetsAll;
 
     _message = _message + format ["

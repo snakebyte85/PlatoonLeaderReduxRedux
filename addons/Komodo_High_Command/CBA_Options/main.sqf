@@ -1,12 +1,20 @@
+#include "../script_version.hpp"
 
-missionNamespace setVariable ["KMD_Version", 0.11, true];
-private _versionName = ["Komodo's Platoon Leader ", KMD_Version] joinString "";
+private _category = 'Platoon Leader Redux Redux MAJOR.MINOR.PATCH';
+
+[
+    "pl_contact_report_enabled",
+    "CHECKBOX",
+    ["Enable Contact Report","The groups you command will report via chat every time they contact, engage or kill an enemy and when they get a KIA."],
+    _category,
+    true
+] call CBA_fnc_addSetting;
 
 [
     "pl_radio_range", 
     "SLIDER", 
     ["Radio Range", "Set the maximum range for ai info sharing"], 
-	_versionName, 
+	_category, 
     [
         0, 
         2000, 
@@ -17,83 +25,57 @@ private _versionName = ["Komodo's Platoon Leader ", KMD_Version] joinString "";
 ] call CBA_fnc_addSetting;
 
 [
+    "pl_player_side_info_share_enabled",
+    "CHECKBOX",
+    ["Enable Player Side Info sharing","Enable the sharing of opfor forces location among your groups"],
+    _category,
+    false
+] call CBA_fnc_addSetting;
+
+[
     "pl_opfor_info_share_enabled",
     "CHECKBOX",
-    ["Enable Enemy Info sharing","Enable the sharing of information among enemy groups"],
-    _versionName,
-    true
+    ["Enable Enemy Info sharing","Enable the sharing of your side forces location among enemy groups (WARNING: the game would be harder!)"],
+    _category,
+    false
 ] call CBA_fnc_addSetting;
 
 [
-    "pl_additional_ammoBearer",
-    "EDITBOX",
-    ["Additional Ammobearer classnames","Define unit classes that can be used as ammobearers: Format ['example_class_1', 'example_class_2']"],
-    _versionName,
-    "[]"
-] call CBA_fnc_addSetting;
-
-[
-    "pl_enabled_medical",
+    "pl_enable_revival",
     "CHECKBOX",
-    ["Enable Medical System","enable or disable Medical System"],
-    _versionName,
-    true
+    ["Enable Revival System","Enable Revival System. Units in the groups you control have a chance to be wounded and needs to be treated by a medic to be 'revived'."],
+    _category,
+    false
 ] call CBA_fnc_addSetting;
 
 [
-    "pl_enable_vehicle_recovery",
-    "CHECKBOX",
-    ["Enable Vehicle Recovery","enable or disable Vehicle Recovery"],
-    _versionName,
-    true
-] call CBA_fnc_addSetting;
-
-[
-    "pl_additional_engVic",
-    "EDITBOX",
-    ["Additional Repair Vehicles classnames","Define Vehicles that can repair/recover other Vehicles: Format ['example_class_1', 'example_class_2']"],
-    _versionName,
-    "[]"
-] call CBA_fnc_addSetting;
-
-[
-    "pl_arty_enabled",
-    "CHECKBOX",
-    ["Enable Artillery","enable or disable Platoon Leader Artillery Supports"],
-    _versionName,
-    true
-] call CBA_fnc_addSetting;
-
-[
-    "pl_arty_ammo",
-    "EDITBOX",
-    ["155mm Artillery Ammo","Set Amount of Rounds for 155mm Artillery Support"],
-    _versionName,
-    "24"
-] call CBA_fnc_addSetting;
-
-[
-    "pl_cas_enabled",
-    "CHECKBOX",
-    ["Enable CAS","enable or disable Platoon Leader Close Air Support"],
-    _versionName,
-    true
-] call CBA_fnc_addSetting;
-
-[
-    "pl_sorties",
-    "EDITBOX",
-    ["CAS Sortie Amount","Different CAS Strikes cost different amount of 'Sorties' select Amount"],
-    _versionName,
-    "25"
+    "pl_death_chance",
+    "SLIDER",
+    ["Death chance of the Revival System","If the Revival System is enabled, this is the chance the unit will receive a fatal hit and die, without being just wounded and revivable."],
+    _category,
+    [
+        0, 
+        100, 
+        10, 
+        0,
+        true
+    ]
 ] call CBA_fnc_addSetting;
 
 [
     "pl_enable_3d_icons",
     "CHECKBOX",
     ["Enable 3D Icons","Enable Extra 3D Icons when selecting or hovering over a group"],
-    _versionName,
+    _category,
     true
+] call CBA_fnc_addSetting;
+
+[
+    "pl_debug",
+    "CHECKBOX",
+    ["Enable Debug","Enable Extra Debug logging"],
+    _category,
+    false
 ] call CBA_fnc_addSetting;
 
 #include "keybindings.sqf"

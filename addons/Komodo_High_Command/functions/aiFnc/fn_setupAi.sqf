@@ -7,11 +7,6 @@ Original url: "Plmod\pl_ai_fnc.sqf"
 params ["_group"];
 private ["_magCountAll", "_magCountSolo"];
 
-if ((vehicle (leader _group)) != leader _group)then{
-    _vic = vehicle (leader _group);
-    _vic setVariable ["pl_rtb_pos", getPos _vic];
-};
-
 _group setVariable ["aiSetUp", true];
 _group setVariable ["onTask", false];
 _group setVariable ["inContact", false];
@@ -19,21 +14,6 @@ _group setVariable ["sitrepCd", 0];
 _group setVariable ["pl_show_info", true];
 _group setVariable ["pl_hold_fire", false];
 _group allowFleeing 0;
-
-[_group] spawn KMD_fnc_ammoBearer;
-
-{
-    if ((_x != player) or !(_x in switchableUnits)) then {
-        _x unassignItem "Binocular";
-        _x removeWeapon "Binocular";
-        _x unassignItem "Rangefinder";
-        _x removeWeapon "Rangefinder";
-    };
-
-    if (_x getVariable ["pl_special_force", false]) then {
-        [_x] spawn KMD_fnc_specialForceSkill;
-    };
-} forEach (units _group);
 
 _magCountAll = 0;
 {
@@ -59,8 +39,11 @@ _magCountAll = 0;
 
     // [_x] spawn KMD_fnc_autoCrouch;
 
-    if(pl_enabled_medical) 
-	then{[_x] call KMD_fnc_medicalSetup};
+    [_x] call KMD_fnc_medicalSetup;
+    
+    if (_x getVariable ["pl_special_force", false]) then {
+        [_x] spawn KMD_fnc_specialForceSkill;
+    };
 
 } forEach (units _group);
 

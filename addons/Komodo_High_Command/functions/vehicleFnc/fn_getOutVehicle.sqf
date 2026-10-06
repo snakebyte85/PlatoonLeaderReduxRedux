@@ -64,15 +64,6 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
             pl_mapClicked = false;
             _cords = pl_lz_cords;
 
-            if ((_cords distance2D (_vic getVariable "pl_rtb_pos")) > 200) then {
-                // playSound "beep";
-                // _commander sideChat "Roger, Moving to Insertion Point, over";
-            }
-            else
-            {
-                _commander sideChat format ["%1: RTB", groupId (group _commander)];
-            };
-
             _convoyArray = [];
             _inLandConvoy = false;
 
@@ -123,18 +114,7 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
 
                 // Air Convoy
                 if (_vic isKindOf "Air") then {
-                    waitUntil {time >= (missionNamespace getVariable (_convoyId + "time")) and (group _commander) == ((missionNamespace getVariable _convoyId) select (missionNamespace getVariable (_convoyId + "pos")))};
-                    if ((group _commander) != _convoyLeader) then {
-                        _dir = [_cords, _vic getVariable "pl_rtb_pos"] call BIS_fnc_dirTo;
-                        _moveDir = [(_dir - 90)] call KMD_fnc_angleSwitcher;
-                        _cords =  [45*(sin _moveDir),45*(cos _moveDir), 0] vectorAdd [pl_lz_cords select 0, pl_lz_cords select 1, 0];
-                        pl_lz_cords = _cords;
-                    };
-                    _t = time + 10;
-                    missionNamespace setVariable [_convoyId + "time", _t];
-                    _p  = (missionNamespace getVariable (_convoyId + "pos"));
-                    _p = _p + 1;
-                    missionNamespace setVariable [_convoyId + "pos", _p];
+                    hint "This should not happens. Report it as a bug.";
                 }
                 else
                 // Land Convoy
@@ -173,16 +153,24 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                 (driver _vic) commandMove _cords;
             };
             _markerName = format ["lzmarker%1", (groupId _group)];
-            createMarker [_markerName, pl_lz_marker_cords];
+            createMarker [_markerName, pl_lz_marker_cords];            
             _markerName setMarkerType "mil_marker";
-            _markerName setMarkerColor "colorBLUFOR";
+            if (_vic isKindOf "Air") then {
+                _markerName setMarkerType "hd_end";
+                _markerName setMarkerText "LZ";
+            };
+             _markerName setMarkerColor ([side _vic] call KMD_fnc_sideToMarkerColor);
             // Setup the cargo of Transport Vehicle
             _cargo = fullCrew [_vic, "cargo", false];
             _cargoGroups = [];
             {
-                _cargoGroups pushBack (group (_x select 0));
+                _groupCargo = group (_x select 0);
+                if( _group != _groupCargo ) then { // just another check so we don't make the crew group disembark
+                    _cargoGroups pushBack _groupCargo;
+                };
             } forEach _cargo;
             _cargoGroups = _cargoGroups arrayIntersect _cargoGroups;
+            format ["Cargo groups %1 will get out from vehicle group %2", _cargoGroups, _group] call KMD_fnc_debug;
 
             /// Transport Execution ///
 
@@ -198,34 +186,19 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                         _x disableAI "AUTOTARGET";
                     } forEach (units (group _commander));
                     (group _commander) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\land_ca.paa"];
-                    [_vic, 0] call KMD_fnc_doorAnimation;
                     sleep 40;
                     waitUntil {sleep 0.1; unitReady _vic or !alive _vic};
                     playSound "beep";
-                    driver _vic sideChat format ["%1: Beginning landing", groupId (group (driver _vic))];
+                    driver _vic sideChat "Beginning landing";
                     _vic land "GET OUT";
                     sleep 10;
                     waitUntil {sleep 0.1; (isTouchingGround _vic) or !alive _vic};
                     sleep 1;
-                    // waitUntil {!alive _vic or (unitReady _vic)};
-                    //waitUntil {sleep 0.1; (isTouchingGround _vic) or !alive _vic};
-                    // for "_i" from count waypoints _group - 1 to 0 step -1 do {
-                    //     deleteWaypoint [_group, _i];
-                    // };
-                    [_vic, 1] call KMD_fnc_doorAnimation;
                     {
-                        _x leaveVehicle _vic;
-                        player hcSetGroup [_x];
+                        _x leaveVehicle _vic;                        
                         _x setVariable ["pl_show_info", true];
-                        if (_x != (group player)) then {
-                            if ((_vic distance2D (_vic getVariable "pl_rtb_pos")) > 300) then {
-                                [_x, _vic] spawn KMD_fnc_airAssualtSecurity;
-                            }
-                            else
-                            {
-                                _x addWaypoint [getPos _vic, 10];
-                            };
-                        };
+                        player hcSetGroup [_x];
+                        
                     } forEach _cargoGroups;
                 }
                 else
@@ -341,8 +314,8 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                     if !(_moveInConvoy) then {
                         {
                             _x setVariable ["pl_show_info", true];
-                            // _x addWaypoint [getPos _vic, 10];
                             player hcSetGroup [_x];
+                            // _x addWaypoint [getPos _vic, 10];                            
                         } forEach _cargoGroups;
                     };
                     // Single Land Tarnsport ariving
@@ -357,7 +330,6 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                     _x disableAI "AUTOTARGET";
                 } forEach (units (group _commander));
                 (group _commander) setVariable ["specialIcon", "\A3\ui_f\data\igui\cfg\simpleTasks\types\land_ca.paa"];
-                [_vic, 0] call KMD_fnc_doorAnimation;
                 sleep 40;
 
                 // Air Vehicle in Vehicle Tranport Ariving
@@ -366,7 +338,6 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
                 {
                     player hcsetGroup [(group (_x select 0))];
                 } forEach fullCrew[vehicle (leader (_group)), "cargo", false];
-                [_vic, 1] call KMD_fnc_doorAnimation;
                 sleep 5;
                 for "_i" from count waypoints _group - 1 to 0 step -1 do {
                     deleteWaypoint [_group, _i];
@@ -382,8 +353,7 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
             if !(_moveInConvoy) then {
                 waitUntil {sleep 0.1; ((count (fullCrew [_vic, "cargo", false])) == 0) or (!alive _vic)};
                 // playSound "beep";
-                // _commander sideChat format ["%1 finished unloading, over", groupId _group];
-                player hcSetGroup [_group];
+                // _commander sideChat format ["%1 finished unloading, over", groupId _group];                
                 sleep 2;
                 (group _commander) setVariable ["setSpecial", false];
             };
@@ -391,33 +361,6 @@ Original url: "Plmod\pl_vehicle_fnc.sqf"
             deleteMarker _markerName;
             sleep 10;
 
-            // Air Tranport Ariving
-            if (_vic isKindOf "Air") then {
-                _rtbCords = _vic getVariable "pl_rtb_pos";
-                [_vic, 0] call KMD_fnc_doorAnimation;
-                if ((_vic distance2D _rtbCords) < 300) exitWith {_vic engineOn false};
-                (group _commander) addWaypoint [_rtbCords, 0];
-                {
-                    _x disableAI "AUTOCOMBAT";
-                } forEach (crew _vic);
-                sleep 2;
-                playSound "beep";
-                _commander sideChat format ["%1: RTB", groupId (group _commander)];
-                waitUntil {sleep 0.1; (unitReady _vic) or (!alive _vic)};
-                {
-                    _x enableAI "AUTOCOMBAT";
-                } forEach (crew _vic);
-                sleep 1;
-                // doStop _vic;
-                {
-                    _x enableAI "AUTOCOMBAT";
-                    _x disableAI "TARGET";
-                    _x enableAI "AUTOTARGET";
-                } forEach (units (group _commander));
-                group (_commander) setVariable ["pl_draw_convoy", false];
-                pl_draw_convoy_array = pl_draw_convoy_array - [_convoyArray];
-                _vic land "LAND";
-            };
         }
         else
         {

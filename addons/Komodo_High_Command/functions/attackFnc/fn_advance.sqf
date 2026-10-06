@@ -15,7 +15,7 @@ Original url: "Plmod\pl_attack_fnc.sqf"
         _cords = screenToWorld [0.5,0.5];
     };
 
-    if (vehicle (leader _group) != leader _group) exitWith {hint "Infantry ONLY Task!"};
+    //if (vehicle (leader _group) != leader _group) exitWith {hint "Infantry ONLY Task!"};
 
     [_group] call KMD_fnc_reset;
 

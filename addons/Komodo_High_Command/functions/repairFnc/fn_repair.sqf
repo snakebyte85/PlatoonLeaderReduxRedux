@@ -38,7 +38,7 @@ Original url: "Plmod\pl_repair_fnc.sqf"
             private _distance = 100;
             {
                 if ((_cords distance2D (_x #0)) < _distance) then {
-                    _repairTarget = _x,
+                    _repairTarget = _x;
                     _distance = (_cords distance2D (_x #0));
                 };
             } forEach pl_destroyed_vics_data;
@@ -78,7 +78,7 @@ Original url: "Plmod\pl_repair_fnc.sqf"
             sleep 1;
             if ((alive _engVic) and (_group getVariable "onTask") and ({ alive _x } count units _group > 0) and (time >= _repairTime)) then {
                 _idx = pl_destroyed_vics_data find _repairTarget;
-                0 = pl_destroyed_vics_data deleteAt _idx;
+                pl_destroyed_vics_data deleteAt _idx;
                 deleteMarker _markerName;
                 _toRepairVic setDamage 0;
                 _toRepairVic setFuel 1;
