@@ -123,7 +123,7 @@ Original url: "Plmod/pl_defence_fnc.sqf"
                     _movePos = _cords;
                     _isLeader = true;
                 };
-                if (!(isNil "_medic") && pl_enabled_revival) then {
+                if (!(isNil "_medic") && pl_enable_revival) then {
                     if (_unit == _medic) then {
                         _movePos = _medicPos;
                     };
@@ -151,7 +151,7 @@ Original url: "Plmod/pl_defence_fnc.sqf"
         };
         // Cancel Task
         
-        if (!(isNil "_medic") and pl_enabled_revival) then {
+        if (!(isNil "_medic") and pl_enable_revival) then {
             _medic setVariable ["pl_is_ccp_medic", true];
             while {(_group getVariable ["onTask", true])} do {
                 {
